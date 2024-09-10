@@ -1,0 +1,130 @@
+TASK-1
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv("/content/Dataset .csv")
+df.head()
+df.shape
+cuisine_count=df['Cuisines'].str.split(',').explode().value_counts()
+
+top_three_cuisine=cuisine_count.head(3)
+print(top_three_cuisine)
+top_three_cuisine=top_three_cuisine.sort_values(ascending=False)
+
+fig,Ax=plt.subplots(figsize=(10,6))
+sns.barplot(x=top_three_cuisine.index,y=top_three_cuisine.values,ax=Ax)
+plt.title("Top Three Most Common Cuisines")
+plt.xlabel("Cuisine")
+plt.ylabel("Count")
+plt.xticks(rotation=45)
+plt.show()
+top_restaurents=len(df)
+percentage_per_cuisine=(top_three_cuisine/top_restaurents)*100
+print(percentage_per_cuisine)
+print('percentage of restaurents for top three cusines')
+percentage_per_cuisine
+fig.ax=plt.subplots(figsize=(10,6))
+ab=sns.barplot(x=percentage_per_cuisine.index,y=percentage_per_cuisine.values)
+for bar in ab.containers[0]:
+  height=bar.get_height()
+  ab.annotate(f'{height:.2f}%',xy=(bar.get_x()+bar.get_width()/2,height),xytext=(0,3),textcoords='offset points',va='bottom')
+plt.title("Percentage of Restaurents for Top Three Cuisines")
+plt.xlabel("Cuisine")
+plt.ylabel("Percentage")
+plt.show()
+
+
+TASK-2
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv("/content/Dataset .csv")
+df.head()
+df.shape
+df.info()
+print(df['City'].value_counts()[[0]].index[0])
+average_restaurent_rating=df.groupby('City').agg(Average_rating=('Aggregate rating','mean')).sort_values(by='Average_rating',ascending=False)
+print(average_restaurent_rating)
+plt.subplots(figsize=(20, 10))
+average_restaurent_rating = df.groupby('City').agg(Average_rating=('Aggregate rating', 'mean')).sort_values(by='Average_rating', ascending=False)
+bars = plt.bar(average_restaurent_rating.index, average_restaurent_rating['Average_rating'])
+
+for bar in bars:
+    plt.text(bar.get_x()+bar.get_width()/2,bar.get_height(),round(bar.get_height(),2), ha='center', va='bottom')
+
+plt.title("Average Rating for Restaurants in Each City")
+plt.xlabel("City")
+plt.ylabel("Average Rating")
+
+plt.show()
+average_restaurent_rating = df.groupby('City').agg(average_rating=('Aggregate rating', 'mean')).sort_values(by='average_rating', ascending=False)
+print('The city with the highest average rating is:', average_restaurent_rating.index[0])
+
+
+TASK-3
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv("/content/Dataset .csv")
+df.head()
+df.shape
+df.info()
+plt.subplots(figsize=(10,6))
+plt.hist(df['Price range'],bins=df['Price range'].nunique(),edgecolor='black')
+plt.title("Price Range Distribution")
+plt.xlabel("Price Range")
+plt.ylabel("Frequency")
+plt.show()
+price_range_counts = df['Price range'].value_counts().reset_index()
+price_range_counts
+import pandas as pd
+
+price_range_counts = df['Price range'].value_counts().reset_index()
+total_restaurants = len(df)
+percentage_per_price_range = df['Price range'].value_counts(normalize=True) * 100
+
+print("Percentage of restaurants in each price range category:")
+for price_range, percentage in percentage_per_price_range.items():
+    print(f"{price_range}: {percentage:.2f}%")
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(10, 4))
+percentage_per_price_range = df['Price range'].value_counts(normalize=True) * 100
+percentage_per_price_range.plot(kind='bar', ax=ax, color='green')
+
+for bar in ax.containers[0]:
+    height = bar.get_height()
+    ax.annotate(f'{height:.2f}%', xy=(bar.get_x() + bar.get_width() / 2, height),xytext=(0, 3), textcoords='offset points', ha='center', va='bottom')
+plt.title("Percentage of Restaurants in Each Price Range Category")
+plt.xlabel("Price Range")
+plt.ylabel("Percentage")
+
+plt.show()
+
+
+TASK-4
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv("/content/Dataset .csv")
+df.head()
+df.shape
+df.info()
+total_online_delivery_restaurents=len(df[df['Has Online delivery']=='Yes'])
+total_restaurents=len(df)
+percentage_online_delivery=(total_online_delivery_restaurents/total_restaurents)*100
+print("the percentage of restaurents that offer online delivery is",percentage_online_delivery)
+restaurents_with_online_delivery=df[df['Has Online delivery']=='Yes']
+average_rating=restaurents_with_online_delivery['Aggregate rating'].mean()
+print("the average rating of restaurents that offer online delivery is",average_rating)
+restaurents_without_online_delivery=df[df['Has Online delivery']=='No']
+average_rating=restaurents_without_online_delivery['Aggregate rating'].mean()
+print("the average rating of restaurents that do not offer online delivery is",average_rating)
